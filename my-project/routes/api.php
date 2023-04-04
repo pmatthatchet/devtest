@@ -23,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Office data controller
 Route::controller(OfficeDataController::class)->prefix('/csv')->group(function () {
     Route::get('/get', 'getData');
+    Route::get('/reimport', 'reimportData');
 });

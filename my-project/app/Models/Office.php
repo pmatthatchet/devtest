@@ -28,4 +28,32 @@ class Office extends Model
         'table_count',
         'area_size',
     ];
+
+    // =============================
+
+    /**
+     * Get row count
+     *
+     * @return integer
+     */
+    public static function count(): int 
+    {
+        return self::query()->count();
+    }
+
+    /**
+     * Wipe the entire table
+     *
+     * @return integer The number of rows deleted
+     */
+    public static function formatAll(): int 
+    {
+        $cnt = self::count();
+        self::query()->delete();
+
+        // Get the difference
+        $cnt = $cnt - self::count();
+
+        return $cnt;
+    }
 }
