@@ -16,7 +16,7 @@ class OfficeQueryBuilder
      * @param \Closure|null $modifier_callback
      * @return QueryBuilder
      */
-    public static function createQB(?\Closure $modifier_callback): QueryBuilder
+    public static function createQB(?\Closure $modifier_callback = null): QueryBuilder
     {
         $qb = OfficeModel::query();
 
@@ -80,7 +80,7 @@ class OfficeQueryBuilder
      * @param integer|null $maxNum If supplied, apply maximum area filter
      * @return void
      */
-    public static function filterArea(QueryBuilder $qb, ?int $minNum, ?int $maxNum)
+    public static function filterArea(QueryBuilder $qb, ?int $minNum = null, ?int $maxNum = null)
     {
         // Apply min range
         if (!is_null($minNum)) {
@@ -101,7 +101,7 @@ class OfficeQueryBuilder
      * @param integer|null $maxNum If supplied, apply maximum price filter
      * @return void
      */
-    public static function filterPrice(QueryBuilder $qb, ?int $minNum, ?int $maxNum)
+    public static function filterPrice(QueryBuilder $qb, ?int $minNum = null, ?int $maxNum = null)
     {
         // Apply min range
         if (!is_null($minNum)) {
