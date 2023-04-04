@@ -3,21 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
 use App\Services\OfficeQueryBuilder;
+use App\Services\OfficeCSVDataProcessor;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class OfficeDataController extends BaseController
 {
-
     /**
      * Query office data from the database
      *
      * @param Request $req
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getData(Request $req): \Illuminate\Http\JsonResponse
     {
@@ -71,5 +69,22 @@ class OfficeDataController extends BaseController
         });
 
         return response()->json($qb->paginate($perPage, ['*'], 'page', $page));
+    }
+
+    /**
+     * Format the table and reimport new updated data
+     *
+     * @param Request $req
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function reimportData(Request $req): \Illuminate\Http\JsonResponse
+    {
+        try {
+            return response()->json(OfficeCSVDataProcessor::processCSV());
+        
+        } catch (\ErrorException $e) {
+            // File not found
+            return response()->json(['errors' => [$e->getMessage()]], 500);
+        }
     }
 }
