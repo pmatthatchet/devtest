@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Validator;
 
+use App\Models\Office as OfficeModel;
 use App\Services\OfficeQueryBuilder;
 use App\Services\OfficeCSVDataProcessor;
-use Illuminate\Support\Facades\Validator;
 
 class OfficeDataController extends BaseController
 {
@@ -84,10 +85,20 @@ class OfficeDataController extends BaseController
     public function reimportData(Request $req): \Illuminate\Http\JsonResponse
     {
         try {
-            return response()->json(OfficeCSVDataProcessor::processCSV());
+            $newData = OfficeCSVDataProcessor::processCSV();
+            
+            // Check if there is data
+            if (count($newData) == 0) {
+                return response()->json(['errors' => 'No data to import and replace'], 400);
+            }
+
+            // Delete and insert new
+            $deleted = OfficeModel::formatAll();
+            OfficeModel::insert($newData);
+
+            return response()->json(['deleted' => $deleted, 'created' => count($newData)]);     
         
         } catch (\ErrorException $e) {
-            // File not found
             return response()->json(['errors' => [$e->getMessage()]], 500);
         }
     }

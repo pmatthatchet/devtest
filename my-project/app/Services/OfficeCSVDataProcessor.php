@@ -14,11 +14,13 @@ class OfficeCSVDataProcessor
 
     /**
      * Process the CSV file located at self::CSV_LOCATION
+     * 
+     * Note: Currently does not validate the input of the CSV
      *
      * @throws \ErrorException
-     * @return void
+     * @return array
      */
-    public static function processCSV()
+    public static function processCSV(): array
     {
         $ret = [];
         $row = 0;
@@ -42,9 +44,13 @@ class OfficeCSVDataProcessor
 
                 } else {
                     // Append data
-                    for ($c = 0; $c < $num; $c++) {
-                        $ret[] = $data[$c];
-                    }
+                    $ret[] = [
+                        'name' => $data[0],
+                        'price' => intval($data[1]),
+                        'office_count' => intval($data[2]),
+                        'table_count' => intval($data[3]),
+                        'area_size' => intval($data[4]),
+                    ];
                 }
 
                 $row++;
