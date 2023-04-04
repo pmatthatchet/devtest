@@ -51,19 +51,23 @@ class OfficeDataController extends BaseController
             }
 
             if (isset($vars['offices'])) {
-                OfficeQueryBuilder::filterOffices($qb, $vars['offices']);
+                OfficeQueryBuilder::filterOffices($qb, intval($vars['offices']));
             }
 
             if (isset($vars['tables'])) {
-                OfficeQueryBuilder::filterTables($qb, $vars['tables']);
+                OfficeQueryBuilder::filterTables($qb, intval($vars['tables']));
             }
 
             if (isset($vars['min_area']) || isset($vars['max_area'])) {
-                OfficeQueryBuilder::filterPrice($qb, $vars['min_area'] ?? null, $vars['max_area'] ?? null);
+                $min = isset($vars['min_area']) ? intval($vars['min_area']) : null;
+                $max = isset($vars['max_area']) ? intval($vars['max_area']) : null;
+                OfficeQueryBuilder::filterArea($qb, $min, $max);
             }
 
             if (isset($vars['min_price']) || isset($vars['max_price'])) {
-                OfficeQueryBuilder::filterPrice($qb, $vars['min_price'] ?? null, $vars['max_price'] ?? null);
+                $min = isset($vars['min_price']) ? intval($vars['min_price']) : null;
+                $max = isset($vars['max_price']) ? intval($vars['max_price']) : null;
+                OfficeQueryBuilder::filterPrice($qb, $min, $max);
             }
 
         });
